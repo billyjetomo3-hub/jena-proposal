@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrandStaycation Suite | Luxury Hotel & Operations Platform</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%231C2541' stroke='%23D4AF37' stroke-width='2'/><path d='M16 6L19.5 13H26.5L21 17.5L23 24.5L16 20.5L9 24.5L11 17.5L5.5 13H12.5L16 6Z' fill='%23D4AF37'/></svg>">
+</head>
+<body>
+
+    <!-- ================= AUTHENTICATION & REGISTRATION OVERLAY ================= -->
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-header">
+                <!-- Custom SVG Luxury Logo -->
+                <svg class="auth-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="16" r="15" fill="#1C2541" stroke="#D4AF37" stroke-width="2"/>
+                    <path d="M16 6L19.5 13H26.5L21 17.5L23 24.5L16 20.5L9 24.5L11 17.5L5.5 13H12.5L16 6Z" fill="#D4AF37" stroke="#E5C158" stroke-width="1"/>
+                    <path d="M10 26H22V28H10V26Z" fill="#D4AF37"/>
+                </svg>
+                <h2 class="serif-font" style="color: var(--gold);">GrandStaycation Suite</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">Luxury Hotel Reservation & Operations Platform</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Register Account</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="login-email" class="form-input" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="login-password" class="form-input" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-gold">Access Portal</button>
+            </form>
+
+            <!-- Registration Form -->
+            <form id="register-form" style="display: none;" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="reg-name" class="form-input" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="reg-email" class="form-input" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="reg-password" class="form-input" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Account Role</label>
+                    <select id="reg-role" class="form-select">
+                        <option value="guest">Guest / Patron</option>
+                        <option value="reception">Front Desk Receptionist</option>
+                        <option value="housekeeping">Housekeeping Staff</option>
+                        <option value="admin">Hotel Manager / Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-gold">Create Account</button>
+            </form>
+
+            <div class="quick-demos">
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Instant 1-Click Demo Presets:</p>
+                <div class="quick-demo-btns">
+                    <button class="btn-demo" onclick="quickDemoLogin('guest@grandstaycation.com', 'guest123')">Guest Demo</button>
+                    <button class="btn-demo" onclick="quickDemoLogin('reception@grandstaycation.com', 'reception123')">Receptionist</button>
+                    <button class="btn-demo" onclick="quickDemoLogin('clean@grandstaycation.com', 'clean123')">Housekeeping</button>
+                    <button class="btn-demo" onclick="quickDemoLogin('admin@grandstaycation.com', 'admin123')">Admin / Manager</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MAIN APP CONTAINER ================= -->
+    <div id="app-container">
+        <!-- Navbar -->
+        <header class="navbar">
+            <div class="brand-box">
+                <svg class="brand-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="16" r="15" fill="#1C2541" stroke="#D4AF37" stroke-width="2"/>
+                    <path d="M16 6L19.5 13H26.5L21 17.5L23 24.5L16 20.5L9 24.5L11 17.5L5.5 13H12.5L16 6Z" fill="#D4AF37" stroke="#E5C158" stroke-width="1"/>
+                    <path d="M10 26H22V28H10V26Z" fill="#D4AF37"/>
+                </svg>
+                <span class="brand-title serif-font">GrandStaycation</span>
+            </div>
+            
+            <nav class="nav-links" id="dynamic-nav-links">
+                <!-- Dynamically rendered based on role -->
+            </nav>
+
+            <div class="user-panel">
+                <div class="user-badge">
+                    <div class="user-name" id="nav-user-name">Guest User</div>
+                    <div class="user-role" id="nav-user-role">Patron</div>
+                </div>
+                <button class="btn-logout" onclick="logout()">Sign Out</button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- MODULE 1: GUEST BOOKING PORTAL -->
+            <section id="view-booking" class="view-section active">
+                <h2 class="section-title serif-font">Guest Booking Portal & Room Selection</h2>
+                <p class="section-desc">Experience unmatched hospitality. Reserve luxury suites and rooms with instant down-payment locking.</p>
+
+                <div class="card" style="margin-bottom: 25px; padding: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                    <div style="flex: 1; min-width: 150px;">
+                        <label class="form-label">Arrival Date</label>
+                        <input type="date" id="filter-arrival" class="form-input" value="2026-11-09">
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <label class="form-label">Departure Date</label>
+                        <input type="date" id="filter-departure" class="form-input" value="2026-11-12">
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <label class="form-label">Room Category Filter</label>
+                        <select id="filter-category" class="form-select" onchange="renderBookingCatalog()">
+                            <option value="all">All Categories</option>
+                            <option value="Executive Standard">Executive Standard (₱3,500)</option>
+                            <option value="Deluxe Ocean View">Deluxe Ocean View (₱6,500)</option>
+                            <option value="Executive Suite">Executive Suite (₱9,500)</option>
+                            <option value="Presidential Suite">Presidential Suite (₱14,500)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-3" id="room-catalog-grid">
+                    <!-- Populated via JavaScript -->
+                </div>
+            </section>
+
+            <!-- MODULE 2: EXPRESS QR CHECK-IN & DIGITAL PASS -->
+            <section id="view-checkin" class="view-section">
+                <h2 class="section-title serif-font">Contactless QR Pass & Express Check-In</h2>
+                <p class="section-desc">Verify your active reservations or scan digital boarding passes for instant 1-minute front desk check-in.</p>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px; color: var(--gold);" class="serif-font">Active Digital Boarding Pass</h3>
+                        <div id="user-digital-pass-container">
+                            <!-- Rendered active pass for guest -->
+                        </div>
+                    </div>
+                    <div class="card" id="frontdesk-scanner-box">
+                        <h3 style="margin-bottom: 15px; color: var(--gold);" class="serif-font">Front-Desk QR Verification Tool</h3>
+                        <div class="form-group">
+                            <label class="form-label">Enter Booking Reference ID</label>
+                            <input type="text" id="lookup-booking-id" class="form-input" placeholder="e.g. GSS-84291">
+                        </div>
+                        <button class="btn-gold" onclick="verifyAndCheckInBooking()">Verify & Process Check-In</button>
+                        <div id="lookup-result-box" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 3: HOUSEKEEPING DASHBOARD -->
+            <section id="view-housekeeping" class="view-section">
+                <h2 class="section-title serif-font">Housekeeping & Room Status Dashboard</h2>
+                <p class="section-desc">Real-time room status tracking and staff turnaround coordination.</p>
+
+                <div class="grid-3" id="housekeeping-room-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
+            <!-- MODULE 4: REVENUE & ANALYTICS -->
+            <section id="view-analytics" class="view-section">
+                <h2 class="section-title serif-font">Revenue Analytics & Balance Tracking</h2>
+                <p class="section-desc">Centralized financial reports, daily income summaries, and occupancy insights.</p>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-title">Total Revenue</div>
+                        <div class="kpi-value" id="kpi-revenue">$0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Pending Balances</div>
+                        <div class="kpi-value" id="kpi-pending">$0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Occupancy Rate</div>
+                        <div class="kpi-value" id="kpi-occupancy">0%</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Completed Bookings</div>
+                        <div class="kpi-value" id="kpi-bookings">0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Average Daily Rate (ADR)</div>
+                        <div class="kpi-value" id="kpi-adr">$0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">RevPAR</div>
+                        <div class="kpi-value" id="kpi-revpar">$0</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                    <button class="btn-gold" style="width: auto; padding: 10px 20px;" onclick="exportSystemLogs()">Export System Logs</button>
+                    <button class="btn-logout" style="padding: 10px 20px; background: rgba(153, 27, 27, 0.4); border: 1px solid #991B1B;" onclick="resetToDemoState()">Reset to Demo State</button>
+                </div>
+
+
+                <div class="card">
+                    <h3 style="margin-bottom: 15px; color: var(--gold);" class="serif-font">All Guest Transactions & Logs</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ref Code</th>
+                                    <th>Guest Name</th>
+                                    <th>Room Type</th>
+                                    <th>Down-Payment</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-table-body">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+
+<!-- Sound Effects -->
+<audio id="click-sound" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAWACAB compressed="false"></audio>
+<audio id="success-sound" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAWACAB compressed="false"></audio>
+<audio id="error-sound" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAWACAB compressed="false"></audio>
+</body>
+</html>
